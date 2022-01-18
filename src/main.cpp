@@ -13,6 +13,9 @@
 #include <sys/time.h>
 #include <vector>
 
+
+
+#include "Request.hpp"
 // Пока-что response вместо файла
 const char* response =
 "HTTP/1.1 200 OK\r\n"
@@ -148,12 +151,24 @@ int main (int argc, char **argv)
 			else if (outputQueue[i].filter == EVFILT_READ &&
 			outputQueue[i].ident != listenEvent.ident)
 			{
-				char buf[8193];
-				int amountRead = recv (outputQueue[i].ident, buf, 8192, 0);
+				char buf[66666];
+				int amountRead = recv (outputQueue[i].ident, buf, 66665, 0);
 				buf[amountRead] = 0;
+
+
+				/* Тут накакано */
+				Request request(buf);
+				request.parseStartLine();
+				std::cout << "-->" << request.METHOD << " | " << request.URI << " | " << request.HTTP_PROTOCOL << "<--" << std::endl;
+
+				//  Нужно еще по ходу заголовок HOST проверять (((( Как же заебало уже это все, какой больной человек придумал это все...
+				/* Кто-то потом уберет */
+
+
 				// Печатаем на экран
 				// Можем увидем какой запрос к нам пришел
 				std::cout << buf << std::endl;
+				std::cout << amountRead << std::endl;
 				// Читаем до тех пор, пока не наберем заданную размерность в Content-length
 					/* Временны код */
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
