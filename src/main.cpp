@@ -154,14 +154,15 @@ int main (int argc, char **argv)
 				// Печатаем на экран
 				// Можем увидем какой запрос к нам пришел
 				std::cout << buf << std::endl;
-
 				// Читаем до тех пор, пока не наберем заданную размерность в Content-length
 					/* Временны код */
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
-					if (outputQueue[i].data - amountRead)
-						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 , 0);
+					if (outputQueue[i].data - amountRead) {
+						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ, EV_ADD | EV_ENABLE | EV_ONESHOT,
+							   0, 0, 0);
+					}
 					else
-						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);							
+						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);
 
 			}
 			// Пытаемся отправить сообщение
