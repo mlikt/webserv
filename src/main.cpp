@@ -16,12 +16,13 @@
 
 
 #include "Request.hpp"
+#include "Response.hpp"
 // Пока-что response вместо файла
 const char* response =
 "HTTP/1.1 200 OK\r\n"
 "Content-Type: text/html; charset=UTF-8\r\n"
 "Connection: close\r\n"
-"Content-Length: 872\r\n\r\n"
+"Content-Length: 893\r\n\r\n"
 "<doctype !html>\n"
 "    <html>\n"
 "        <head>\n"
@@ -43,8 +44,16 @@ const char* response =
 "            <input type=\"text\" id=\"lname\" name=\"lname\" value=\"Doe\"><br><br>\n"
 "            <input type=\"submit\" value=\"Submit\">\n"
 "          </form>\n"
+"          <img src=\"/src.jpg\">\n"
 "</body>\n"
 "</html>\n";
+
+std::ifstream::pos_type filesize(const char* filename)
+{
+	std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+	return in.tellg();
+}
+
 
 int main (int argc, char **argv)
 {
@@ -103,10 +112,12 @@ int main (int argc, char **argv)
 	
 	while(true)
 	{
+		bzero(&(*outputQueue.begin()), outputQueue.capacity() * sizeof(struct kevent));
 		amountEvent = kevent(kqfd, &*inputQueue.begin(), inputQueue.size(),
 		&*outputQueue.begin(), outputQueue.size(), nullptr);
 		// Высвобождаем для регистрации новых событий
 		inputQueue.clear();
+
 
 		int i = 0;
 		while (i < amountEvent)
@@ -151,15 +162,31 @@ int main (int argc, char **argv)
 			else if (outputQueue[i].filter == EVFILT_READ &&
 			outputQueue[i].ident != listenEvent.ident)
 			{
-				char buf[66666];
-				int amountRead = recv (outputQueue[i].ident, buf, 66665, 0);
-				buf[amountRead] = 0;
 
+				char buf[8193];
+				int amountRead = recv (outputQueue[i].ident, buf, 8192, 0);
+				buf[amountRead] = 0;
+				Request *request = nullptr;
+
+				// Дописываем или создаем новый объект
+				std::string *ptr = nullptr;
+
+				// Выводим на экран заголовок от клиента
+				std::cout << buf << std::endl;
+
+				if (outputQueue[i].udata == nullptr) {
+					request = new Request();
+					request->request = request->request + buf;
+					request->parseStartLine();
+					request->checkReqPath();
+				}
+				else
+					request = (Request *)outputQueue[i].udata;
 
 				/* Тут накакано */
-				Request request(buf);
+				/*Request request(buf);
 				request.parseStartLine();
-				std::cout << "-->" << request.METHOD << " | " << request.URI << " | " << request.HTTP_PROTOCOL << "<--" << std::endl;
+				std::cout << "-->" << request.METHOD << " | " << request.URI << " | " << request.HTTP_PROTOCOL << "<--" << std::endl;*/
 
 				//  Нужно еще по ходу заголовок HOST проверять (((( Как же заебало уже это все, какой больной человек придумал это все...
 				/* Кто-то потом уберет */
@@ -167,24 +194,38 @@ int main (int argc, char **argv)
 
 				// Печатаем на экран
 				// Можем увидем какой запрос к нам пришел
-				std::cout << buf << std::endl;
-				std::cout << amountRead << std::endl;
+				/*std::cout << buf << std::endl;
+				std::cout << amountRead << std::endl;*/
+
+
 				// Читаем до тех пор, пока не наберем заданную размерность в Content-length
 					/* Временны код */
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
 					if (outputQueue[i].data - amountRead) {
 						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ, EV_ADD | EV_ENABLE | EV_ONESHOT,
-							   0, 0, 0);
+							   0, 0, request);
 					}
 					else
-						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);
+						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 , request);
 
 			}
 			// Пытаемся отправить сообщение
 			else if (outputQueue[i].filter == EVFILT_WRITE &&
 			outputQueue[i].ident != listenEvent.ident) 
 			{
-				int amountWrite  = send(outputQueue[i].ident, response, strlen(response), 0);
+
+				// Как строку передали так и будем передавать объект
+				Request *request = ((Request *)outputQueue[i].udata);
+				Response *customResponse = nullptr;
+				customResponse = new Response();
+				customResponse->formResponse(request->staticPageFolder);
+				std::cout << customResponse->fullResponse << std::endl;
+//				std::cout << request->METHOD << std::endl;
+				//int amountWrite  = send(outputQueue[i].ident, request->request.c_str(), request->request.length(), 0);
+				int amountWrite  = send(outputQueue[i].ident, customResponse->fullResponse.c_str(), customResponse->fullResponse.length(), 0);
+
+
+				std::cout << amountWrite << std::endl;
 				inputQueue.insert(inputQueue.begin(), (struct kevent){});
 				EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);
 			}

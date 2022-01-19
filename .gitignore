@@ -1,3 +1,5 @@
 .idea
 /src/a.out
 .DS_Store
+/src/a.out.dSYM
+Webserv

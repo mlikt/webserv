@@ -33,3 +33,14 @@ int Request::parseStartLine() {
 	this->HTTP_PROTOCOL = dividedFirstLine[2];
 	return 1;
 }
+
+int Request::checkReqPath() {
+	DIR *dir;
+	dir = opendir(("./pages" + this->URI).c_str());
+	if (!dir) {
+		std::cout << "NO DIR" << std::endl;
+		return -1;
+	}
+	this->staticPageFolder = "./pages" + this->URI;
+	return 1;
+}
