@@ -1,9 +1,183 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Example</title>
+    <title>Notes</title>
+    <style>
+        body {
+            background-image: linear-gradient(to right, #8360c3, #2ebf91);
+        }
+        .container {
+            width: 1440px;
+            margin: auto;
+        }
+        .header {
+            height: 120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1440px;
+            background-color: rgba(255, 188, 209, 1);
+            opacity: 1;
+            margin: auto;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .header h1 {
+            margin-left: 100px;
+        }
+        #add-btn {
+            font-size: 18px;
+            width: 170px;
+            height: 50px;
+            margin-right: 100px;
+            background-color: #6867AC;
+            color: #FFF;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+        }
+        .notes-board {
+            margin-top: 100px;
+            max-width: 1440px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .note {
+            width: 400px;
+            height: 450px;
+            border-radius: 20px;
+            border: 3px solid white;
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .inner-note {
+            margin: 20px;
+        }
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .note-header h1{
+          margin: 0;
+        }
+        .delete {
+            cursor: pointer;
+            font-size: 20px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            font-weight: 600;
+        }
+        .note-body {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        .input-container {
+            margin-top: 100px;
+            display: flex;
+            gap: 30px;
+            flex-direction: column;
+        }
+        .input-container input {
+            padding-left: 10px;
+            height: 30px;
+            width: 400px;
+            font-size: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+        input::placeholder {
+            color: black;
+        }
+        .input-container textarea {
+            resize: none;
+            padding-left: 10px;
+            height: 300px;
+            width: 400px;
+            font-size: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+        textarea::placeholder {
+            color: black;
+        }
+        #create-btn {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            margin-left: 100px;
+            width: 200px;
+            height: 40px;
+            background-color: white;
+            border: none;
+            border-radius: 6px;
+            color: red;
+        }
+    </style>
 </head>
 <body>
-<p>This is an example of a simple HTML page with one paragraph.</p>
+    <div class="container">
+    <div class="header">
+        <h1>TEST - TEST - TEST</h1>
+        <button id="add-btn">ADD NEW NOTE</button>
+    </div>
+    <div class="notes-board">
+        <div class="note">
+            <div class="inner-note">
+                <div class="note-header">
+                    <h1>Note name</h1>
+                    <button class="delete">X</button>
+                </div>
+                <div class="note-body">
+                    <p>test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text</p>
+                </div>
+            </div>
+        </div>
+        <div class="note">
+            <div class="inner-note">
+                <div class="note-header">
+                    <h1>Note name</h1>
+                    <button class="delete">X</button>
+                </div>
+                <div class="note-body">
+                    <p>test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text</p>
+                </div>
+            </div>
+        </div>
+        <div class="note">
+            <div class="inner-note">
+                <div class="note-header">
+                    <h1>Note name</h1>
+                    <button class="delete">X</button>
+                </div>
+                <div class="note-body">
+                    <p>test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text-test-text
+                        <br><br>DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS DENIS PENIS
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div id="inp-cont" class="input-container">
+            <input type="text" maxlength="30" placeholder="Note name">
+            <textarea maxlength="1000" placeholder="Note text"></textarea>
+            <button id="create-btn">CREATE NEW NOTE</button>
+        </div>
+    </div>
 </body>
+<script>
+    const appearBtn = document.getElementById('add-btn');
+    const inpCont = document.getElementById('inp-cont');
+
+    appearBtn.onclick = () => {
+       inpCont.style.display === "none"
+       ? inpCont.style.display = "flex"
+       : inpCont.style.display = "none"
+    }
+    const delButtons = document.querySelectorAll('.delete')
+    Array.from(delButtons).map(btn => btn.onclick = () => confirm("Are you sure?"))
+</script>
 </html>
