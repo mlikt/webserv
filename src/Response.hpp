@@ -5,12 +5,18 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "Request.hpp"
+
 class Response {
-public:
-	Response();
-	~Response();
-	std::string response;
-	void formResponse(std::string staticPageFolder);
-	std::string fullResponse;
+	private:
+		std::string response;
+		std::string fullResponse;
+		std::string URI;
+	
+	public:
+		Response();
+		~Response();
+		void formResponse(std::string staticPageFolder);
+		bool SetURI(const std::string & URI);
 };
 #endif

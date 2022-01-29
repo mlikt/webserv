@@ -12,7 +12,10 @@ void Response::formResponse(std::string staticPageFolder) {
 			"Connection: close\r\n"
 			"Content-Length: ";
 	std::ostringstream buf;
-	std::ifstream input ((staticPageFolder + "/index.html").c_str());
+	if (staticPageFolder == "/"){
+		staticPageFolder = "/index.html";
+	}
+	std::ifstream input ((staticPageFolder).c_str());
 	buf << input.rdbuf();
 	this->fullResponse = START + std::to_string(buf.str().length()) + "\r\n\r\n" + buf.str();
 }
