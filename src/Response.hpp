@@ -6,14 +6,15 @@
 #include <iostream>
 #include <sstream>
 #include "Request.hpp"
+#include "Response.hpp"
 
 class Response {
 	private:
 		std::string response;
-		std::string fullResponse;
 		std::string URI;
 	
 	public:
+		std::string fullResponse;
 		Response();
 		~Response();
 		void formResponse(std::string staticPageFolder);

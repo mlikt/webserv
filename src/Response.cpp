@@ -17,6 +17,7 @@ void Response::formResponse(std::string staticPageFolder) {
 	}
 	std::ifstream input ((staticPageFolder).c_str());
 	buf << input.rdbuf();
+	std::cout << buf << std::endl;
 	this->fullResponse = START + std::to_string(buf.str().length()) + "\r\n\r\n" + buf.str();
 }
 

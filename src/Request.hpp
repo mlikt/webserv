@@ -19,6 +19,10 @@ class Request {
 	private:
 		// Полный запрос
 		std::string request;
+
+		//Полученные заголовки
+		std::string reqHeaders;
+
 		// Тело запроса для POST
 		std::string bufBody;
 		
@@ -38,9 +42,10 @@ class Request {
 		~Request() {};
 
 		int PutNextChunk(const std::string &chunk, ConnectedNode &node);
-		
 		int checkReqPath();
 		int parseStartLine(void);
+		std::string GetStaticPageFolder() {return this->staticPageFolder;}
 };
+
 
 #endif

@@ -19,6 +19,10 @@ void ConnectedNode::CreateRequest()
 	}
 }
 
+void ConnectedNode::CreateResponse()
+{
+	this->response = new Response();
+}
 void ConnectedNode::PutNextChunkRequest(const std::string &chunk)
 {
 	this->request->PutNextChunk(chunk, *this);
@@ -33,3 +37,8 @@ void ConnectedNode::SetConnectState(const State state)
 {
 	this->state = state;
 }
+
+void ConnectedNode::FormResponseTest() {
+	this->response->formResponse(this->request->GetStaticPageFolder());
+}
+

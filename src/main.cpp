@@ -178,6 +178,12 @@ int main (int argc, char **argv)
 				ConnectedNode &node = *((ConnectedNode *)outputQueue[i].udata);
 				if (node.GetConnectState() == ConnectedNode::Create)
 				{
+					node.CreateRequest();
+					node.SetConnectState(ConnectedNode::RecvRequest);
+				}
+				if (node.GetConnectState() == ConnectedNode::RecvRequest)
+				{
+					std::cout << "I AM HERE" << std::endl;
 					node.PutNextChunkRequest(buf);
 				}
 				// Читаем до тех пор, пока не наберем заданную размерность в Content-length или не встретим два раза подряд /r/n что является 
@@ -189,7 +195,10 @@ int main (int argc, char **argv)
 							   0, 0, &node);
 					}
 					else
-						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 , &node);
+					{
+						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE,
+							   EV_ADD | EV_ENABLE | EV_ONESHOT, 0, 0, &node);
+					}
 
 			}
 			// Пытаемся отправить сообщение
@@ -197,13 +206,10 @@ int main (int argc, char **argv)
 			outputQueue[i].ident != listenEvent.ident) 
 			{
 				ConnectedNode &node = *((ConnectedNode *)outputQueue[i].udata);
-
-
-				// customResponse->formResponse(request->staticPageFolder);
 				// std::cout << customResponse->fullResponse << std::endl;
 //				std::cout << request->METHOD << std::endl;
 				//int amountWrite  = send(outputQueue[i].ident, request->request.c_str(), request->request.length(), 0);
-				// int amountWrite  = send(outputQueue[i].ident, customResponse->fullResponse.c_str(), customResponse->fullResponse.length(), 0);
+				//int amountWrite  = send(outputQueue[i].ident, customResponse->fullResponse.c_str(), customResponse->fullResponse.length(), 0);
 
 
 				// std::cout << amountWrite << std::endl;

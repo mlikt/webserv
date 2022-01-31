@@ -3,7 +3,8 @@
 
 #include "Request.hpp"
 #include "Response.hpp"
-
+class Response;
+class Request;
 
 class ConnectedNode
 {
@@ -34,9 +35,11 @@ class ConnectedNode
 		~ConnectedNode();
 		void PutNextChunkRequest(const std::string &chunk);
 		void CreateRequest();
-
+		void CreateResponse();
 		State GetConnectState() const ;
 		void SetConnectState(const State state);
+		void FormResponseTest();
+
 
 };
 #endif
