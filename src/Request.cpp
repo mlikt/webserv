@@ -22,6 +22,7 @@ int Request::PutNextChunk(const std::string &chunk, ConnectedNode &node)
 
 		if (this->recvByteRequest > this->LimitRequestFieldSize)
 		{
+			node.SetConnectState(ConnectedNode::Error);
 			return (REQUEST_URI_TOO_LARGE);
 		}
 	}

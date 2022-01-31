@@ -10,7 +10,7 @@
 
 #define LIMITE_SIZE 8192U
 
-#define PLAYLOAD_TOO_LARGE 413
+#define PAYLOAD_TOO_LARGE 413
 #define REQUEST_URI_TOO_LARGE  414
 
 class ConnectedNode;

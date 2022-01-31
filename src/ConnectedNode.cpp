@@ -28,3 +28,8 @@ ConnectedNode::State ConnectedNode::GetConnectState() const
 {
 	return (state);
 }
+
+void ConnectedNode::SetConnectState(const State state)
+{
+	this->state = state;
+}

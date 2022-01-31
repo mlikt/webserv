@@ -36,6 +36,7 @@ class ConnectedNode
 		void CreateRequest();
 
 		State GetConnectState() const ;
+		void SetConnectState(const State state);
 
 };
 #endif

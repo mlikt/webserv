@@ -176,7 +176,10 @@ int main (int argc, char **argv)
 				buf[amountRead] = 0;
 
 				ConnectedNode &node = *((ConnectedNode *)outputQueue[i].udata);
-
+				if (node.GetConnectState() == ConnectedNode::Create)
+				{
+					node.PutNextChunkRequest(buf);
+				}
 				// Читаем до тех пор, пока не наберем заданную размерность в Content-length или не встретим два раза подряд /r/n что является 
 				// концом заголовка
 					/* Временны код */
