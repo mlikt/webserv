@@ -39,7 +39,7 @@ struct Location {
 	std::string	getAutoIndex() const { return autoIndex; }
 	int	getLimit() const { return limitClientBodySize; }
 	std::map<std::string, bool>	getMethods() const { return methods; }
-	const std::pair<int, std::string>&	getRedire() const { return redirect; }
+	const std::pair<int, std::string>&	getRedirect() const { return redirect; }
 };
 
 typedef struct	s_server {
