@@ -139,6 +139,8 @@ int main (int argc, char **argv)
 
 				if (newConnect > -1)
 				{
+										std::cout << "}{yita" << std::endl;
+
 					// Делаем неблокирующиее соединение и 
 					// говорим, чтобы не бросался сигнал при
 					// аварийном завершении клиента 
@@ -158,6 +160,9 @@ int main (int argc, char **argv)
 			// Обрабатываем ошибку
 			else if (outputQueue[i].flags & EV_ERROR)
 			{
+				std::cout << "Error" << std::endl;
+				close(outputQueue[i].ident);
+
 			}
 			// Если кто-то закрыл соединение
 			else if (outputQueue[i].flags & EV_EOF &&
@@ -185,7 +190,7 @@ int main (int argc, char **argv)
 				if (node.GetConnectState() == ConnectedNode::RecvRequest)
 				{
 					std::cout << "I AM HERE" << std::endl;
-					std::cout << buf << std::endl;
+					 std::cout << buf << std::endl;
 					node.PutNextChunkRequest(buf);
 				}
 
@@ -201,7 +206,7 @@ int main (int argc, char **argv)
 					/* Временны код */
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
 					if (node.GetConnectState() == ConnectedNode::RecvRequest
-					||
+						||
 						node.GetConnectState() == ConnectedNode::RecvBodyMessage) {
 						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ, EV_ADD | EV_ENABLE | EV_ONESHOT,
 							   0, 0, &node);
@@ -218,13 +223,8 @@ int main (int argc, char **argv)
 			outputQueue[i].ident != listenEvent.ident) 
 			{
 				ConnectedNode &node = *((ConnectedNode *)outputQueue[i].udata);
-				// std::cout << customResponse->fullResponse << std::endl;
-//				std::cout << request->METHOD << std::endl;
-				//int amountWrite  = send(outputQueue[i].ident, request->request.c_str(), request->request.length(), 0);
-				//int amountWrite  = send(outputQueue[i].ident, customResponse->fullResponse.c_str(), customResponse->fullResponse.length(), 0);
+				send(outputQueue[i].ident, response, strlen(response), 0);
 
-
-				// std::cout << amountWrite << std::endl;
 				inputQueue.insert(inputQueue.begin(), (struct kevent){});
 				EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);
 			}
