@@ -5,9 +5,10 @@
 #include <sstream>
 #include <vector>
 #include <dirent.h>
+#include <map>
 
 #include "ConnectedNode.hpp"
-
+#include "headers.hpp"
 #define LIMITE_SIZE 8192U
 
 #define PAYLOAD_TOO_LARGE 413
@@ -22,6 +23,7 @@ class Request {
 
 		//Полученные заголовки
 		std::string reqHeaders;
+		std::map<std::string, std::string> headers;
 
 		// Тело запроса для POST
 		std::string bufBody;
@@ -46,6 +48,8 @@ class Request {
 		int checkReqPath();
 		int parseStartLine(void);
 		std::string GetStaticPageFolder() {return this->staticPageFolder;}
+
+		void FormAllHeaders();
 };
 
 

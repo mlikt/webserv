@@ -41,12 +41,23 @@ int Request::PutNextChunk(std::string &chunk, ConnectedNode &node)
 		}
 		if (found != std::string::npos)
 		{
-			this->reqHeaders = this->request.substr(0, found);
+			this->reqHeaders = this->request.substr(this->request.find("\r\n"), found);
+			//Проверяем все ли ок в нашей первой строке заголовков
 			if (this->parseStartLine() == -1)
 			{
 				node.SetConnectState(ConnectedNode::Error);
 				return 404;
-			}; // 
+			}
+			// Здесь снизу надо реализовать складирование заголовков в словарь
+			// Кто это прочел, тот лох ( Автор не считается) :)
+			else {
+				this->FormAllHeaders();
+				std::cout << "Я НАСОБИРАЛ " << this->headers.size() << " ЗАГОЛОВКОВ" <<  std::endl;
+			}
+
+
+
+
 			if (this->METHOD == "GET")
 			{
 				this->checkReqPath();
@@ -104,4 +115,24 @@ int Request::checkReqPath() {
 	this->staticPageFolder = "./pages" + this->URI;
 	std::cout << this->staticPageFolder << std::endl;
 	return 1;
+}
+
+void Request::FormAllHeaders() {
+
+	std::vector<std::string> splitted = customSplit(this->reqHeaders, "\r\n");
+	for (int i = 0; i < splitted.size(); i++) {
+		std::string currentString = splitted.at(i);
+		if (currentString.length() == 0) continue;
+		std::string key = currentString.substr(0, currentString.find(":"));
+		std::string value = currentString.substr(currentString.find(":")+2);
+		this->headers[key] = value;
+	}
+	/*std::cout << this->headers.size() << std::endl;
+	std::map <std::string, std::string> :: iterator it = this->headers.begin();
+	for (;it != this->headers.end();it++) {
+		std::cout << "+++++++++++++" << std::endl;
+		std::cout << "KEY|" << it->first << "|" << std::endl;
+		std::cout << "VALUE|" << it->second << "|" << std::endl;
+		std::cout << "+++++++++++++" << std::endl;
+	}*/
 }

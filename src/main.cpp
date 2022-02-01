@@ -223,7 +223,7 @@ int main (int argc, char **argv)
 			outputQueue[i].ident != listenEvent.ident) 
 			{
 				ConnectedNode &node = *((ConnectedNode *)outputQueue[i].udata);
-				send(outputQueue[i].ident, response, strlen(response), 0);
+				//send(outputQueue[i].ident, response, strlen(response), 0);
 
 				inputQueue.insert(inputQueue.begin(), (struct kevent){});
 				EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);

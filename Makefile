@@ -1,6 +1,6 @@
 
-SRC = ./src/Request.cpp ./src/Response.cpp ./src/ConnectedNode.cpp  ./src/main.cpp
-HEADERS = ./src/ConnectedNode.hpp ./src/Request.hpp ./src/Response.hpp
+SRC = ./src/utils.cpp ./src/Request.cpp ./src/Response.cpp ./src/ConnectedNode.cpp  ./src/main.cpp
+HEADERS = ./src/headers.hpp ./src/ConnectedNode.hpp ./src/Request.hpp ./src/Response.hpp
 OBJ = ${SRC:.cpp=.o}
 #CFLAGCS = -Wall -Wextra -Werror -Wshadow -Wno-shadow -std='c++98'
 CFLAGCS = -std='c++98'
