@@ -186,15 +186,25 @@ int main (int argc, char **argv)
 					std::cout << "I AM HERE" << std::endl;
 					node.PutNextChunkRequest(buf);
 				}
+
+				if (node.GetConnectState() == ConnectedNode::Error)
+				{
+					close(outputQueue[i].ident);
+					i++;
+					delete &node;
+					continue;
+				}
 				// Читаем до тех пор, пока не наберем заданную размерность в Content-length или не встретим два раза подряд /r/n что является 
 				// концом заголовка
 					/* Временны код */
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
-					if (outputQueue[i].data - amountRead) {
+					if (node.GetConnectState() == ConnectedNode::RecvRequest 
+					||
+						node.GetConnectState() == ConnectedNode::RecvBodyMessage) {
 						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ, EV_ADD | EV_ENABLE | EV_ONESHOT,
 							   0, 0, &node);
 					}
-					else
+					else if (node.GetConnectState() == ConnectedNode::SendResponse)
 					{
 						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE,
 							   EV_ADD | EV_ENABLE | EV_ONESHOT, 0, 0, &node);

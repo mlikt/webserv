@@ -13,7 +13,7 @@ std::vector<std::string> split (const std::string &s, char delim) {
 	return result;
 }
 
-int Request::PutNextChunk(const std::string &chunk, ConnectedNode &node) 
+int Request::PutNextChunk(std::string &chunk, ConnectedNode &node) 
 {
 
 	if (node.GetConnectState() == ConnectedNode::RecvRequest)
@@ -23,7 +23,7 @@ int Request::PutNextChunk(const std::string &chunk, ConnectedNode &node)
 		// после отсечения конца запроса тоесть двойного \r\n\r\n
 		this->recvByteRequest += chunk.size();
 		this->request += chunk;
-
+		chunk.clear();
 
 		// !!!!пока закомменитирую лень разбираться хуле он туда заходит как скотина
 		// !!!!!оставлю это старому мудрецу, а то я ваши сервера рот туда-сюда поворачивал
@@ -36,22 +36,35 @@ int Request::PutNextChunk(const std::string &chunk, ConnectedNode &node)
 		if (found != std::string::npos)
 		{
 			this->reqHeaders = this->request.substr(0, found);
-			this->parseStartLine();
+			if (this->parseStartLine() == -1)
+			{
+				node.SetConnectState(ConnectedNode::Error);
+				return 404;
+			}; // 
 			if (this->METHOD == "GET")
 			{
 				this->checkReqPath();
 				std::cout << "VSE OK" << std::endl;
 				node.SetConnectState(ConnectedNode::SendResponse);
 			}
-			else
+			else if (this->METHOD == "POST")
 			{
-				std::cout << "SOSI ZOPY" << std::endl;
+				bufBody = request.substr(found + 4);
+				node.SetConnectState(ConnectedNode::RecvBodyMessage);
+			}
+			else if (this->METHOD == "DELETE")
+			{
+
 			}
 
+			return 200;
 		}
+
 	}
-	else if (node.GetConnectState() == ConnectedNode::RecvBodyMessage)
+
+	if (node.GetConnectState() == ConnectedNode::RecvBodyMessage)
 	{
+		bufBody += chunk;
 
 	}
 	return (0);

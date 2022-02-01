@@ -25,6 +25,7 @@ class Request {
 
 		// Тело запроса для POST
 		std::string bufBody;
+		std::string reminder;
 		
 		std::string METHOD;
 		std::string URI;
@@ -41,7 +42,7 @@ class Request {
 		Request():LimitRequestFieldSize(LIMITE_SIZE), recvByteRequest(0) {};
 		~Request() {};
 
-		int PutNextChunk(const std::string &chunk, ConnectedNode &node);
+		int PutNextChunk(std::string &chunk, ConnectedNode &node);
 		int checkReqPath();
 		int parseStartLine(void);
 		std::string GetStaticPageFolder() {return this->staticPageFolder;}
