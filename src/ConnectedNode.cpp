@@ -23,7 +23,7 @@ void ConnectedNode::CreateResponse()
 {
 	this->response = new Response();
 }
-void ConnectedNode::PutNextChunkRequest(const std::string &chunk)
+void ConnectedNode::PutNextChunkRequest(std::string chunk)
 {
 	this->request->PutNextChunk(chunk, *this);
 }

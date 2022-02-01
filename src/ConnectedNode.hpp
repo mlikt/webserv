@@ -33,7 +33,7 @@ class ConnectedNode
 	public:
 		ConnectedNode(const ConnectedNode::State state);
 		~ConnectedNode();
-		void PutNextChunkRequest(const std::string &chunk);
+		void PutNextChunkRequest(std::string chunk);
 		void CreateRequest();
 		void CreateResponse();
 		State GetConnectState() const ;

@@ -160,10 +160,11 @@ int main (int argc, char **argv)
 			{
 			}
 			// Если кто-то закрыл соединение
-			else if (outputQueue[i].flags & EV_EOF && 
+			else if (outputQueue[i].flags & EV_EOF &&
 			// но не закрываем слушющий сокет
 			outputQueue[i].ident != listenEvent.ident)
 			{
+				std::cout << "close connected" << std::endl;
 				close(outputQueue[i].ident);
 			}
 			// Пытаемся получить сообщение
@@ -184,6 +185,7 @@ int main (int argc, char **argv)
 				if (node.GetConnectState() == ConnectedNode::RecvRequest)
 				{
 					std::cout << "I AM HERE" << std::endl;
+					std::cout << buf << std::endl;
 					node.PutNextChunkRequest(buf);
 				}
 
@@ -194,11 +196,11 @@ int main (int argc, char **argv)
 					delete &node;
 					continue;
 				}
-				// Читаем до тех пор, пока не наберем заданную размерность в Content-length или не встретим два раза подряд /r/n что является 
+				// Читаем до тех пор, пока не наберем заданную размерность в Content-length или не встретим два раза подряд /r/n что является
 				// концом заголовка
 					/* Временны код */
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
-					if (node.GetConnectState() == ConnectedNode::RecvRequest 
+					if (node.GetConnectState() == ConnectedNode::RecvRequest
 					||
 						node.GetConnectState() == ConnectedNode::RecvBodyMessage) {
 						EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ, EV_ADD | EV_ENABLE | EV_ONESHOT,

@@ -33,6 +33,12 @@ int Request::PutNextChunk(std::string &chunk, ConnectedNode &node)
 			return (REQUEST_URI_TOO_LARGE);
 		}*/
 		std::size_t found = this->request.find("\r\n\r\n");
+
+		if (found > this->LimitRequestFieldSize){
+			std::cout << "MENYA ZDES NET" << std::endl;
+			node.SetConnectState(ConnectedNode::Error);
+			return (REQUEST_URI_TOO_LARGE);
+		}
 		if (found != std::string::npos)
 		{
 			this->reqHeaders = this->request.substr(0, found);

@@ -1,5 +1,5 @@
 
-SRC = ./src/Request.cpp ./src/main.cpp ./src/ConnectedNode.cpp  ./src/Response.cpp
+SRC = ./src/Request.cpp ./src/Response.cpp ./src/ConnectedNode.cpp  ./src/main.cpp
 HEADERS = ./src/ConnectedNode.hpp ./src/Request.hpp ./src/Response.hpp
 OBJ = ${SRC:.cpp=.o}
 #CFLAGCS = -Wall -Wextra -Werror -Wshadow -Wno-shadow -std='c++98'
