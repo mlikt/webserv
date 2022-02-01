@@ -44,9 +44,7 @@ struct Location {
 
 typedef struct	s_server {
 	std::string								serverName;
-	std::string								hostName;
 	int										port;
-	std::string 							logFile;
 	std::map<int, std::string>				errorPages;
 	std::multimap<std::string, Location>	locations;
 }	t_server;

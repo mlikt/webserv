@@ -1,20 +1,46 @@
 #include "ParseConfig.hpp"
 
+void ParsingServerNode(t_server &server, std::string &serverNode) {
+
+}
+
 void InitServerStruct(t_server &t) {
 	t.serverName = "";
-	t.hostName = "";
 	t.port = 0;
-	t.logFile = "";
+}
+
+size_t FindNextPosition(const std::string &buf) {
+	size_t pos, from = 0;
+	size_t i = 0;
+
+	while(i < 2) {
+		pos = buf.find("server:", from);
+		if (std::string::npos == pos) {
+			break ;
+		}
+		from = pos + 1;
+		i++;
+	}
+	return (pos);
 }
 
 t_server StartParsingBuffer(std::string &buf) {
 	t_server server;
 	InitServerStruct(server);
 
-	std::string elementServer;
-	size_t positionNextServer;
+	std::string serverNode;
+	size_t positionNextServer = 0;
 
-	if ()
+	if ((positionNextServer = FindNextPosition(buf))) {
+		serverNode = buf.substr(0, positionNextServer);
+//		std::cout << "server node\n" <<  serverNode << std::endl;
+		ParsingServerNode(server, serverNode);
+		buf.erase(0, positionNextServer);
+	}
+	else {
+		serverNode = buf.substr(0, buf.length());
+		buf.erase(0, buf.length());
+	}
 	return (server);
 }
 
