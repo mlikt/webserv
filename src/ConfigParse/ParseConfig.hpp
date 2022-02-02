@@ -25,27 +25,22 @@
 
 struct Location {
 	std::string								path;
-	std::map<std::string, bool>				methods;
 	std::string								root;
 	std::multimap<std::string, std::string>	cgi;
-	std::string								index;
-	std::string								autoIndex;
-	int										limitClientBodySize;
-	std::pair<int, std::string>				redirect;
+	bool									cgi_status;
 
 	std::string	getRoot() const { return root; }
+	std::string	getPath() const { return path; }
+	bool	getStatus() const {return cgi_status; }
 	const std::multimap<std::string, std::string>&	getCgi() const { return cgi; }
-	std::string	getIndex() const { return index; }
-	std::string	getAutoIndex() const { return autoIndex; }
-	int	getLimit() const { return limitClientBodySize; }
-	std::map<std::string, bool>	getMethods() const { return methods; }
-	const std::pair<int, std::string>&	getRedirect() const { return redirect; }
+
 };
 
 typedef struct	s_server {
+	std::string 							index;
 	std::string								serverName;
 	int										port;
-	std::map<int, std::string>				errorPages;
+	std::string								errorPages;
 	std::multimap<std::string, Location>	locations;
 }	t_server;
 
@@ -65,4 +60,4 @@ private:
 	const int	status;
 };
 
-#endif //WEBSERV_PARSECONFIG_HPP
+#endif

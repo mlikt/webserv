@@ -1,12 +1,38 @@
 #include "ParseConfig.hpp"
 
-void ParsingServerNode(t_server &server, std::string &serverNode) {
+void ServerLocationPArsing(std::string &locatioin, t_server &server) {
+	// parsing location module
+}
 
+void ServerPropertyParsing(std::string line, t_server &server) {
+	// parsing  server property
+}
+
+void ParsingServerNode(t_server &server, std::string &serverNode) {
+	std::string serverStr = "server:\n";
+	std::string serverProperty;
+
+	serverNode.erase(0, serverStr.length());
+	serverProperty = serverNode.substr(0, serverNode.find("\n\n"));
+	serverProperty += "\n";
+//	std::cout << serverProperty << std::endl;
+	serverNode.erase(0, serverProperty.length());
+	int i = 0;
+	while(serverProperty.length() != 0) {
+		std::string line = serverProperty.substr(0, serverProperty.find('\n'));
+		serverProperty.erase(0, serverProperty.find('\n') + 1);
+//		ServerPropertyParsing(line, server);
+//		std::cout << line << std::endl;
+	}
+//	std::cout << serverNode;
+	ServerLocationParsing(serverNode, server);
 }
 
 void InitServerStruct(t_server &t) {
 	t.serverName = "";
 	t.port = 0;
+	t.errorPages = "";
+	t.index = "";
 }
 
 size_t FindNextPosition(const std::string &buf) {
