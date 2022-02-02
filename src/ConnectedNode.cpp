@@ -23,9 +23,9 @@ void ConnectedNode::CreateResponse()
 {
 	this->response = new Response();
 }
-void ConnectedNode::PutNextChunkRequest(std::string chunk)
+int ConnectedNode::PutNextChunkRequest(std::string chunk)
 {
-	this->request->PutNextChunk(chunk, *this);
+	return this->request->PutNextChunk(chunk, *this);
 }
 
 ConnectedNode::State ConnectedNode::GetConnectState() const 
@@ -40,5 +40,29 @@ void ConnectedNode::SetConnectState(const State state)
 
 void ConnectedNode::FormResponseTest() {
 	this->response->formResponse(this->request->GetStaticPageFolder());
+}
+
+std::string ConnectedNode::GetStaticPagePath() {
+	return this->request->GetStaticPageFolder();
+}
+
+void ConnectedNode::FormHeaders() {
+	this->response->FormHeaders(this->GetStaticPagePath());
+}
+
+std::string ConnectedNode::GetResponse() {
+	return this->response->GetResponse();
+}
+
+void ConnectedNode::SetResponseHeaderState(HeaderState  state) {
+	this->response->SetHeaderState(state);
+}
+
+void ConnectedNode::FormResponseChunk() {
+	this->response->FormResponseChunk();
+}
+
+std::string ConnectedNode::GetResponseChunkBuf(){
+	return this->response->GetChunkBuf();
 }
 

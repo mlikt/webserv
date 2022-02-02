@@ -7,14 +7,14 @@
 #include <dirent.h>
 #include <map>
 
-#include "ConnectedNode.hpp"
 #include "headers.hpp"
-#define LIMITE_SIZE 8192U
-
+#include "ConnectedNode.hpp"
+#define LIMIT_SIZE 8192U
+class Response;
+class ConnectedNode;
 #define PAYLOAD_TOO_LARGE 413
 #define REQUEST_URI_TOO_LARGE  414
 
-class ConnectedNode;
 
 class Request {
 	private:
@@ -41,14 +41,13 @@ class Request {
 		// Директория в которой находятся ресурсы
 		std::string staticPageFolder;
 	public:
-		Request():LimitRequestFieldSize(LIMITE_SIZE), recvByteRequest(0) {};
+		Request():LimitRequestFieldSize(LIMIT_SIZE), recvByteRequest(0) {};
 		~Request() {};
 
 		int PutNextChunk(std::string &chunk, ConnectedNode &node);
 		int checkReqPath();
 		int parseStartLine(void);
 		std::string GetStaticPageFolder() {return this->staticPageFolder;}
-
 		void FormAllHeaders();
 };
 

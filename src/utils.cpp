@@ -14,3 +14,9 @@ std::vector<std::string> customSplit (std::string s, std::string delimiter) {
 	res.push_back (s.substr (pos_start));
 	return res;
 }
+
+
+bool isFileExists (const std::string& name) {
+	struct stat buffer;
+	return (stat (name.c_str(), &buffer) == 0);
+}
