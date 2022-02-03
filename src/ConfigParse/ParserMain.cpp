@@ -1,11 +1,32 @@
 #include "ParseConfig.hpp"
 
-void ServerLocationPArsing(std::string &locatioin, t_server &server) {
+void ServerLocationParsing(std::string &locatioin, t_server &server) {
 	// parsing location module
 }
 
 void ServerPropertyParsing(std::string line, t_server &server) {
-	// parsing  server property
+	if (line.find("server_name:") != std::string.npos) {
+		std:string ip = line.substr(str.find("server_name:") + strlen("server_name:"));
+		strTrim(ip);
+		server.serverName = ip;
+	}
+	if (line.find("listen:") != std::string.npos) {
+		std:string port = line.substr(str.find("listen:") + strlen("listen:"));
+		strTrim(port);
+		server.port = port;
+	}
+	if (line.find("root:") != std::string.npos) {
+		std:string root = line.substr(str.find("root:") + strlen("root:"));
+		strTrim(root);
+		server.root = root;
+	}
+	if (line.find("index:") != std::string.npos) {
+		std:string root = line.substr(str.find("index:") + strlen("index:"));
+		strTrim(root);
+		server.root = root;
+	}
+	if ()
+
 }
 
 void ParsingServerNode(t_server &server, std::string &serverNode) {
@@ -21,7 +42,7 @@ void ParsingServerNode(t_server &server, std::string &serverNode) {
 	while(serverProperty.length() != 0) {
 		std::string line = serverProperty.substr(0, serverProperty.find('\n'));
 		serverProperty.erase(0, serverProperty.find('\n') + 1);
-//		ServerPropertyParsing(line, server);
+		ServerPropertyParsing(line, server);
 //		std::cout << line << std::endl;
 	}
 //	std::cout << serverNode;

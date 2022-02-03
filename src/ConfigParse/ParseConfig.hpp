@@ -41,6 +41,7 @@ typedef struct	s_server {
 	std::string								serverName;
 	int										port;
 	std::string								errorPages;
+	std::string								root;
 	std::multimap<std::string, Location>	locations;
 }	t_server;
 
@@ -60,4 +61,5 @@ private:
 	const int	status;
 };
 
+void	strTrim(std::string &value);
 #endif
