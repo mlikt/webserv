@@ -1,5 +1,5 @@
 #include "Request.hpp"
-
+#include "headers.hpp"
 
 std::vector<std::string> split (const std::string &s, char delim) {
 	std::vector<std::string> result;
@@ -52,7 +52,8 @@ int Request::PutNextChunk(std::string &chunk, ConnectedNode &node)
 			// Кто это прочел, тот лох ( Автор не считается) :)
 			else {
 				this->FormAllHeaders();
-				std::cout << "Я НАСОБИРАЛ " << this->headers.size() << " ЗАГОЛОВКОВ" <<  std::endl;
+				std::cout << "Я НАСОБИРАЛ " << this->headers.size() << " ЗАГОЛОВКОВ"
+																	   "" <<  std::endl;
 			}
 
 
@@ -60,7 +61,10 @@ int Request::PutNextChunk(std::string &chunk, ConnectedNode &node)
 
 			if (this->METHOD == "GET")
 			{
-				this->checkReqPath();
+				if (this->checkReqPath() == -1)
+				{
+					return 404;
+				}
 				std::cout << "VSE OK" << std::endl;
 				node.SetConnectState(ConnectedNode::SendResponse);
 			}
@@ -108,7 +112,7 @@ int Request::parseStartLine() {
 int Request::checkReqPath() {
 	DIR *dir;
 	dir = opendir(("./pages" + this->URI).c_str());
-	if (!dir) {
+	if (!dir && !isFileExists("./pages" + this->URI)) {
 		std::cout << "NO DIR" << std::endl;
 		return -1;
 	}

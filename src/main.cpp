@@ -191,11 +191,15 @@ int main (int argc, char **argv)
 				{
 					std::cout << "I AM HERE" << std::endl;
 					 std::cout << buf << std::endl;
-					node.PutNextChunkRequest(buf);
+					if (node.PutNextChunkRequest(buf) == 404)
+					{
+						node.SetConnectState(ConnectedNode::Error);
+					}
 				}
 
 				if (node.GetConnectState() == ConnectedNode::Error)
 				{
+					std::cout << "CHTO-TO NE TAK, BRAT" << std::endl;
 					close(outputQueue[i].ident);
 					i++;
 					delete &node;
@@ -222,11 +226,33 @@ int main (int argc, char **argv)
 			else if (outputQueue[i].filter == EVFILT_WRITE &&
 			outputQueue[i].ident != listenEvent.ident) 
 			{
+				std::cout << "SEND RESPONSE FROM HERE" << std::endl;
 				ConnectedNode &node = *((ConnectedNode *)outputQueue[i].udata);
-				//send(outputQueue[i].ident, response, strlen(response), 0);
+				if (node.GetConnectState() == ConnectedNode::SendResponse)
+				{
+					node.SetConnectState(ConnectedNode::SendBodyMessage);
+					node.CreateResponse();
+					node.FormHeaders();
+					node.SetResponseHeaderState(NotSend);
+				}
+
+				//BUFF-SIZE 8192 <-------
+				node.FormResponseChunk();
+				send(outputQueue[i].ident, node.GetResponseChunkBuf().c_str(), 400, 0);
 
 				inputQueue.insert(inputQueue.begin(), (struct kevent){});
-				EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);
+				if (node.GetConnectState() == ConnectedNode::ReRecvRequest)
+				{
+					EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_READ , EV_ADD | EV_ENABLE | EV_ONESHOT, 0 ,0 ,0);
+				}
+				else if (node.GetConnectState() == ConnectedNode::SendResponse
+				||
+				node.GetConnectState() == ConnectedNode::SendBodyMessage
+				)
+				{
+					EV_SET(&*inputQueue.begin(), outputQueue[i].ident, EVFILT_WRITE,
+						   EV_ADD | EV_ENABLE | EV_ONESHOT, 0, 0, &node);
+				}
 			}
 			i++;
 		}

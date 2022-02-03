@@ -17,6 +17,7 @@ class ConnectedNode
 			RecvBodyMessage,
 			SendResponse,
 			SendBodyMessage,
+			ReRecvRequest,
 			Closed,
 			Error
 		};
@@ -33,12 +34,18 @@ class ConnectedNode
 	public:
 		ConnectedNode(const ConnectedNode::State state);
 		~ConnectedNode();
-		void PutNextChunkRequest(std::string chunk);
+		int PutNextChunkRequest(std::string chunk);
 		void CreateRequest();
 		void CreateResponse();
 		State GetConnectState() const ;
 		void SetConnectState(const State state);
 		void FormResponseTest();
+		std::string GetStaticPagePath();
+		void FormHeaders();
+		std::string GetResponse();
+		void SetResponseHeaderState(HeaderState  state);
+		void FormResponseChunk();
+		std::string GetResponseChunkBuf();
 
 
 };
