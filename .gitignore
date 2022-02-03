@@ -4,3 +4,4 @@
 /src/a.out.dSYM
 Webserv
 *.dSYM
+*.o
