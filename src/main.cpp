@@ -144,7 +144,7 @@ int main (int argc, char **argv)
 					// Делаем неблокирующиее соединение и 
 					// говорим, чтобы не бросался сигнал при
 					// аварийном завершении клиента 
-					fcntl(newConnect, F_SETFL | SO_NOSIGPIPE, O_NONBLOCK);
+					fcntl(newConnect, F_SETFL , O_NONBLOCK);
 					setsockopt(newConnect, SOL_SOCKET, SO_NOSIGPIPE, (void *)&one, sizeof(int));
 					// Добавляем в очередь регистрации события
 					inputQueue.insert(inputQueue.begin(), (struct kevent){});
@@ -238,7 +238,7 @@ int main (int argc, char **argv)
 
 				//BUFF-SIZE 8192 <-------
 				node.FormResponseChunk();
-				send(outputQueue[i].ident, node.GetResponseChunkBuf().c_str(), 400, 0);
+				send(outputQueue[i].ident, node.GetResponseChunkBuf().c_str(), node.GetResponseChunkBuf().size(), 0);
 
 				inputQueue.insert(inputQueue.begin(), (struct kevent){});
 				if (node.GetConnectState() == ConnectedNode::ReRecvRequest)
